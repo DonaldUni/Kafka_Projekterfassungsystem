@@ -1,13 +1,26 @@
 package Haegertime.Donald.Model;
 
+import javax.persistence.*;
 import java.util.Set;
 
+@Entity
 public class Project {
 
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String projectName;
+
+    @Column(unique = true, nullable = false)
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
+
+    @ManyToMany
     private Set<Employee> assignedEmployees;
 
     public Project() { }
@@ -68,8 +81,8 @@ public class Project {
         this.assignedEmployees = assignedEmployees;
     }
 
-    public boolean removeEmployeeFromProject(Employee employee) {
-        return this.assignedEmployees.remove(employee);
+    public void removeEmployeeFromProject(Employee employee) {
+        this.assignedEmployees.remove(employee);
     }
 
 
