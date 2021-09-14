@@ -43,15 +43,9 @@ public class EmployeeService {
     }
 
 
+    private String getErrorDuplicateMessage(Long id){
 
-    public String getErrorNotFoundMessage(Long id){
-
-        return "This Timerecord with the id "+ id +" has been not found.";
-    }
-
-    public String getErrorDuplicateMessage(Long id){
-
-        return "This Timerecord with the id "+ id +" alraidy exist.";
+        return "This Employee with the id "+ id +" alraidy exist.";
     }
 
 

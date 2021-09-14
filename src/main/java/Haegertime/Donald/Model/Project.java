@@ -22,7 +22,7 @@ public class Project {
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
-    @ManyToMany(mappedBy = "assignedProjects")
+    @ManyToMany(mappedBy = "assignedProjects", fetch = FetchType.EAGER)
     private Set<Employee> assignedEmployees = new HashSet<>();
 
     public Project() { }

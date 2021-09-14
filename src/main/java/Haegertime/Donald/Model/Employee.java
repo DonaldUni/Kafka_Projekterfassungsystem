@@ -18,7 +18,7 @@ public class Employee {
     @Column(nullable = false)
     private String lastname;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( name = "Assigments",joinColumns = {@JoinColumn(name = "Employee_ID")}, inverseJoinColumns = {@JoinColumn(name = "Project_Id")})
     private Set<Project> assignedProjects = new HashSet<>();
 

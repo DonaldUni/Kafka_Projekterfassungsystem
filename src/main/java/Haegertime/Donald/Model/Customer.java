@@ -14,7 +14,7 @@ public class Customer {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Project> projects = new HashSet<>();
 
 
@@ -65,5 +65,12 @@ public class Customer {
         this.projects.remove(existingProject);
     }
 
-
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", projects=" + projects +
+                '}';
+    }
 }
