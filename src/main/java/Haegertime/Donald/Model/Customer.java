@@ -14,7 +14,7 @@ public class Customer {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany( mappedBy = "", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
     private Set<Project> projects = new HashSet<>();
 
 

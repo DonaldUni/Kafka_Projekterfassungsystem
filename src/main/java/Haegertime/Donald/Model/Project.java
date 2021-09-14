@@ -1,9 +1,11 @@
 package Haegertime.Donald.Model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "Project")
 public class Project {
 
     @Id
@@ -20,8 +22,8 @@ public class Project {
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
-    @ManyToMany
-    private Set<Employee> assignedEmployees;
+    @ManyToMany(mappedBy = "assignedProjects")
+    private Set<Employee> assignedEmployees = new HashSet<>();
 
     public Project() { }
 

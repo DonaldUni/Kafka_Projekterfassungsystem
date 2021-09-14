@@ -1,9 +1,11 @@
 package Haegertime.Donald.Model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "Employee")
 public class Employee {
 
     @Id
@@ -17,8 +19,8 @@ public class Employee {
     private String lastname;
 
     @ManyToMany
-    @JoinTable( name = "Assigments", joinColumns = @JoinColumn(name = "Employee_ID"), inverseJoinColumns = @JoinColumn(name = "Project_Id", referencedColumnName = "id"))
-    private Set<Project> assignedProjects;
+    @JoinTable( name = "Assigments",joinColumns = {@JoinColumn(name = "Employee_ID")}, inverseJoinColumns = {@JoinColumn(name = "Project_Id")})
+    private Set<Project> assignedProjects = new HashSet<>();
 
     public Employee() { }
 
