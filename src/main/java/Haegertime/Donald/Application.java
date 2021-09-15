@@ -3,10 +3,13 @@ package Haegertime.Donald;
 import Haegertime.Donald.Model.Customer;
 import Haegertime.Donald.Model.Employee;
 import Haegertime.Donald.Model.Project;
+import Haegertime.Donald.exceptions.DuplicateException;
 import Haegertime.Donald.exceptions.ElementNotFoundException;
 import Haegertime.Donald.repository.CustomerRepository;
 import Haegertime.Donald.repository.EmployeeRepository;
 import Haegertime.Donald.repository.ProjectRepository;
+import Haegertime.Donald.services.CustomerService;
+import Haegertime.Donald.services.EmployeeService;
 import Haegertime.Donald.services.ProjectService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,94 +27,49 @@ public class Application {
 	public static void main(String[] args) {
 
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(Application.class, args);
+		saveFirstDataInDatabase(applicationContext);
+	}
 
-		//save the first object in Database
-		var customerRepo = applicationContext.getBean(CustomerRepository.class);
-		var projectRepo = applicationContext.getBean(ProjectRepository.class);
-		var projectSer = applicationContext.getBean(ProjectService.class);
+	private static void saveFirstDataInDatabase(ConfigurableApplicationContext applicationContext){
 
-		var employeeRepo = applicationContext.getBean(EmployeeRepository.class);
+		var customerService = applicationContext.getBean(CustomerService.class);
+		var projectService = applicationContext.getBean(ProjectService.class);
+		var employeeService = applicationContext.getBean(EmployeeService.class);
 
-		var customer = new Customer(2L,"nom", new HashSet<>());
-		customerRepo.save(customer);
-		customer = customerRepo.findById(1L).get();
-		var project = new Project("name1", "description1", customer, new HashSet<>());
-		var project1 = new Project("name2", "description2", customer, new HashSet<>());
-		var project2 = new Project("name3", "description3", customer, new HashSet<>());
+		var customer = new Customer(2L,"nom-customer1", new HashSet<>());
+		var customer1 = new Customer(2L,"nom-customer2", new HashSet<>());
+		var customer2 = new Customer(3L,"nom-customer3", new HashSet<>());
+
+		var project = new Project("project-name1", "description1", customer, new HashSet<>());
+		var project1 = new Project("project-name2", "description2", customer, new HashSet<>());
+		var project2 = new Project("project-name3", "description3", customer1, new HashSet<>());
+
 		var employee = new Employee("fname", "lname", new HashSet<>());
 
-		Set<Project> projectSet = new HashSet<>();
-		projectSet.add(project);
-		projectSet.add(project1);
-		projectSet.add(project2);
-		customer.setProjects(projectSet);
-		customer = customerRepo.save(customer);
 
-		Set<Project> projectsOfCustomer = customer.getProjects();
-		//projectRepository.delete(project);
+		try {
+			customerService.addCustomer(customer);
+			customerService.addCustomer(customer1);
+			customerService.addCustomer(customer2);
 
-		//System.out.println(projectsOfEmployee);
-		projectsOfCustomer.removeIf(p -> p.getId() == 2L);
+			customer = customerService.findCustomerById(1L);
+			customer1 = customerService.findCustomerById(2L);
 
-		//update projects in employee and save in database
-		customer.setProjects(projectsOfCustomer);
-		customerRepo.save(customer);
+			Set<Project> projectSet = new HashSet<>();
+			Set<Project> projectSet1 = new HashSet<>();
+			projectSet.add(project);
+			projectSet.add(project1);
+			projectSet1.add(project2);
+			customer.setProjects(projectSet);
+			customer1.setProjects(projectSet);
 
+			customerService.updateCustomer(customer);
 
-		/*project = projectRepo.getById(2L);
-		projectRepo.delete(project);*/
+			employeeService.addEmployee(employee);
 
-		/*projectRepo.save(project);
-		projectRepo.save(project1);
-		projectRepo.save(project2);*/
-		employeeRepo.save(employee);
-
-		//projectRepo.deleteById(2L);
-
-
-
-		/*try {
-			projectSer.removeProjectFromCustomer(1L, 2L);
-		} catch (ElementNotFoundException e) {
+		} catch (DuplicateException | ElementNotFoundException e) {
 			e.printStackTrace();
-		}*/
-
-
-
-
-		//Remove Project From Customer
-		//project  = projectRepo.findById(2L).get();
-		/*Project project10 = new Project();
-		project1.setCustomer(customer);
-		Example<Project> projectExample = Example.of(project10, ExampleMatcher.matchingAll());
-		List<Project> projects = projectRepo.findAll(projectExample);
-		projects.remove(project);
-		Set<Project> projectSet = new HashSet<>();
-
-		for (Project p: projects
-			 ) {
-			projectSet.add(p);
-
 		}
-		customer.setProjects(projectSet);
-		customerRepo.save(customer);
-
-		projectRepo.deleteById(2l);*/
-
-
-		/*Set<Project> projectsOfCustomer = new HashSet<>();
-		projectsOfCustomer.add(project);
-		customer.setProjects(projectsOfCustomer);
-		System.out.println(customer);
-		//projectsOfCustomer.remove(project);
-		customer.setProjects(projectsOfCustomer);
-
-		/*try {
-			projectSer.removeProjectFromCustomer(1L, 2L);
-		} catch (ElementNotFoundException e) {
-			e.printStackTrace();
-		}*/
-
 
 	}
 

@@ -8,10 +8,7 @@ import Haegertime.Donald.repository.CustomerRepository;
 import Haegertime.Donald.repository.EmployeeRepository;
 import Haegertime.Donald.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -44,9 +41,16 @@ public class ProjectService {
 
         if (customerId != null) {
             if (customerRepository.existsById(customerId)) {
+
                 Customer customer = customerRepository.findById(customerId).get();
-                newProject.setCustomer(customer);
-                savedProject = projectRepository.save(newProject);
+
+                //add Project To Customer
+                Set<Project> projectsOfCustomer = customer.getProjects();
+                projectsOfCustomer.add(newProject);
+
+                //update projects in customer and save in database
+                customer.setProjects(projectsOfCustomer);
+                customerRepository.save(customer);
             }else {
 
                 throw new ElementNotFoundException(getErrorProjectNotFoundMessage(customerId));
@@ -147,11 +151,6 @@ public class ProjectService {
 
 
 
-
-
-
-
-
     private String getErrorProjectNotFoundMessage(Long id){
 
         return "This Project with the id "+ id +" has been not found.";
@@ -162,10 +161,4 @@ public class ProjectService {
         return "This Customer with the id "+ id +" has been not found.";
     }
 
-
-
-    private String getErrorDuplicateMessage(Long id){
-
-        return "This Project with the id "+ id +" alraidy exist.";
-    }
 }

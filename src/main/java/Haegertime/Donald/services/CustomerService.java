@@ -40,12 +40,26 @@ public class CustomerService {
         return customerRepository.save(newCustomer);
     }
 
-    public Customer updateCustomer(Customer updatedCustomer) {
+    public Customer updateCustomer(Customer updatedCustomer) throws ElementNotFoundException {
 
-        return customerRepository.save(updatedCustomer);
+        Optional<Customer> customer = customerRepository.findById(updatedCustomer.getId());
+
+        if (customer.isPresent()){
+
+            updatedCustomer.setId(customer.get().getId());
+
+            return customerRepository.save(updatedCustomer);
+        }else{
+
+            throw new ElementNotFoundException(getErrorNotFoundMessage(updatedCustomer.getId()));
+        }
+
     }
 
+    private String getErrorNotFoundMessage(Long id){
 
+        return "This Customer with the id "+ id +" has been not found.";
+    }
 
     private String getErrorDuplicateMessage(Long id){
 

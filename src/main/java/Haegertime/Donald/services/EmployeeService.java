@@ -1,5 +1,6 @@
 package Haegertime.Donald.services;
 
+import Haegertime.Donald.Model.Customer;
 import Haegertime.Donald.Model.Employee;
 import Haegertime.Donald.exceptions.DuplicateException;
 import Haegertime.Donald.exceptions.ElementNotFoundException;
@@ -20,7 +21,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee findEmployeeById(Long id) throws ElementNotFoundException {
+    public Employee findEmployeeById(Long id)  {
 
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
 
@@ -39,9 +40,23 @@ public class EmployeeService {
 
     public Employee updateEmployee(Employee updatedEmployee) throws ElementNotFoundException {
 
-        return employeeRepository.save(updatedEmployee);
+        Optional<Employee> employee = employeeRepository.findById(updatedEmployee.getId());
+
+        if (employee.isPresent()){
+
+            updatedEmployee.setId(employee.get().getId());
+            return employeeRepository.save(updatedEmployee);
+        }else{
+
+            throw new ElementNotFoundException(getErrorNotFoundMessage(updatedEmployee.getId()));
+        }
+
     }
 
+    private String getErrorNotFoundMessage(Long id){
+
+        return "This Employee with the id "+ id +" has been not found.";
+    }
 
     private String getErrorDuplicateMessage(Long id){
 
