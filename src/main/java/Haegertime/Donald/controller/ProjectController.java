@@ -41,14 +41,14 @@ public class ProjectController {
     }
 
     @PatchMapping
-    private Project patchProject(@RequestParam(name = "id") Long id, @RequestBody Project updatedProject) {
+    private Project patchProject(@RequestParam(name = "id") Long id, @RequestBody Project updatedProject) throws ElementNotFoundException {
 
         if (updatedProject == null){
 
             return null;
         }else {
 
-            return projectService.updateProject(updatedProject);
+            return projectService.updateProject(id, updatedProject);
         }
     }
 

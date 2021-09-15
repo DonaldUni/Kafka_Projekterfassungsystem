@@ -49,7 +49,7 @@ public class EmployeeController {
             return null;
         }else {
 
-            return employeeService.updateEmployee(updatedEmployee);
+            return employeeService.updateEmployee(id, updatedEmployee);
         }
     }
 

@@ -51,7 +51,7 @@ public class CustomerController {
             return null;
         }else {
 
-            return customerService.updateCustomer(updatedCustomer);
+            return customerService.updateCustomer(id, updatedCustomer);
         }
     }
 

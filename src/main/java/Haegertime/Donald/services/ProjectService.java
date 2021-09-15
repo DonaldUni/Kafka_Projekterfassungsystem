@@ -60,9 +60,23 @@ public class ProjectService {
         return savedProject;
     }
 
-    public Project updateProject(Project updatedProject){
+    public Project updateProject(Long id, Project updatedProject) throws ElementNotFoundException {
 
-        return projectRepository.save(updatedProject);
+        Optional<Project> project = projectRepository.findById(id);
+
+        if (project.isPresent()){
+
+            if(project.get().getId() == updatedProject.getId()){
+
+                return projectRepository.save(updatedProject);
+            }else {
+                return null;
+            }
+
+        }else{
+
+            throw new ElementNotFoundException(getErrorProjectNotFoundMessage(updatedProject.getId()));
+        }
     }
 
     public void removeProjectFromCustomer(Long customerId, Long projectId) throws ElementNotFoundException {
@@ -158,7 +172,7 @@ public class ProjectService {
 
     private String getErrorCustomerNotFoundMessage(Long id){
 
-        return "This Customer with the id "+ id +" has been not found.";
+        return "This Project with the id "+ id +" has been not found.";
     }
 
 }

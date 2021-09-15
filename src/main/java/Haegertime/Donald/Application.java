@@ -63,7 +63,7 @@ public class Application {
 			customer.setProjects(projectSet);
 			customer1.setProjects(projectSet);
 
-			customerService.updateCustomer(customer);
+			customerService.updateCustomer(1L, customer);
 
 			employeeService.addEmployee(employee);
 

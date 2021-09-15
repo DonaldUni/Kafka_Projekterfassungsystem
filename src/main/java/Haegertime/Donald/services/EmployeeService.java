@@ -38,14 +38,18 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public Employee updateEmployee(Employee updatedEmployee) throws ElementNotFoundException {
+    public Employee updateEmployee(Long id, Employee updatedEmployee) throws ElementNotFoundException {
 
-        Optional<Employee> employee = employeeRepository.findById(updatedEmployee.getId());
+        Optional<Employee> employee = employeeRepository.findById(id);
 
         if (employee.isPresent()){
+            if(employee.get().getId() == updatedEmployee.getId()){
 
-            updatedEmployee.setId(employee.get().getId());
-            return employeeRepository.save(updatedEmployee);
+                return employeeRepository.save(updatedEmployee);
+            }else {
+                return null;
+            }
+
         }else{
 
             throw new ElementNotFoundException(getErrorNotFoundMessage(updatedEmployee.getId()));

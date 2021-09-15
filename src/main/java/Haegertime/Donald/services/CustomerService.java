@@ -40,15 +40,19 @@ public class CustomerService {
         return customerRepository.save(newCustomer);
     }
 
-    public Customer updateCustomer(Customer updatedCustomer) throws ElementNotFoundException {
+    public Customer updateCustomer(Long id, Customer updatedCustomer) throws ElementNotFoundException {
 
-        Optional<Customer> customer = customerRepository.findById(updatedCustomer.getId());
+        Optional<Customer> customer = customerRepository.findById(id);
 
         if (customer.isPresent()){
 
-            updatedCustomer.setId(customer.get().getId());
+            if(customer.get().getId() == updatedCustomer.getId()){
 
-            return customerRepository.save(updatedCustomer);
+                return customerRepository.save(updatedCustomer);
+            }else {
+                return null;
+            }
+
         }else{
 
             throw new ElementNotFoundException(getErrorNotFoundMessage(updatedCustomer.getId()));

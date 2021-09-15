@@ -18,7 +18,7 @@ public class Project {
     @Column(unique = true, nullable = false)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
