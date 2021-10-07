@@ -75,7 +75,7 @@ public class ProjectService {
 
         }else{
 
-            throw new ElementNotFoundException(getErrorProjectNotFoundMessage(updatedProject.getId()));
+            throw new ElementNotFoundException(getErrorProjectNotFoundMessage(id));
         }
     }
 
@@ -91,7 +91,19 @@ public class ProjectService {
                     //Remove Project From Customer
                     Set<Project> projectsOfCustomer = customer.getProjects();
 
-                    projectsOfCustomer.removeIf(p -> p.getId() == project.getId());
+                    boolean isProjectInCustomer = false;
+                    for (Project p: projectsOfCustomer) {
+                        if (p.getId() == project.getId()){
+                            isProjectInCustomer = true;
+                            break;
+                        }
+                    }
+
+                    if(isProjectInCustomer){
+                        projectsOfCustomer.removeIf(p -> p.getId() == project.getId());
+                    }else {
+                        throw new ElementNotFoundException(getErrorProjectInCustomerNotFoundMessage(customerId, projectId));
+                    }
 
                     //update projects in customer and save in database
                     customer.setProjects(projectsOfCustomer);
@@ -173,6 +185,12 @@ public class ProjectService {
     private String getErrorCustomerNotFoundMessage(Long id){
 
         return "This Project with the id "+ id +" has been not found.";
+    }
+
+    private String getErrorProjectInCustomerNotFoundMessage(Long customerId, Long projectId){
+
+        return "This Customer with the id "+ customerId +" exist but it has not the project with the id "+ projectId +"in his Projectslist." +
+                "You have enter a inapropiate projectId and so the delete action can't be perfomed.";
     }
 
 }

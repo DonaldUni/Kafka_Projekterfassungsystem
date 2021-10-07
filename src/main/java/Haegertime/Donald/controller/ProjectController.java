@@ -52,20 +52,20 @@ public class ProjectController {
         }
     }
 
-    @DeleteMapping(path ="/projects")
+    @DeleteMapping
     private void deleteProjectFromCustomer(@RequestParam(name = "customerId") Long customerId, @RequestParam(name = "projectId") Long projectId) throws ElementNotFoundException {
 
         projectService.removeProjectFromCustomer(customerId, projectId);
     }
 
-    @PatchMapping(path ="/projects/{project_id}/assignments/{employee_id}")
-    private void postEmployeeToProject(@RequestParam(name = "project_id") Long project_id, @RequestParam(name = "employee_id") Long employee_id) throws ElementNotFoundException {
+    @PatchMapping(path ="/{project_id}/assignments/{employee_id}")
+    private void postEmployeeToProject(@PathVariable(name = "project_id") Long project_id, @PathVariable(name = "employee_id") Long employee_id) throws ElementNotFoundException {
 
         projectService.assignEmployeeToProject(project_id, employee_id);
     }
 
-    @DeleteMapping(path ="/projects/{project_id}/assignments/{employee_id}")
-    private void deleteEmployeeFromProject(@RequestParam(name = "project_id") Long project_id, @RequestParam(name = "employee_id") Long employee_id) throws ElementNotFoundException {
+    @DeleteMapping(path ="/{project_id}/assignments/{employee_id}")
+    private void deleteEmployeeFromProject(@PathVariable(name = "project_id") Long project_id, @PathVariable(name = "employee_id") Long employee_id) throws ElementNotFoundException {
 
         projectService.removeEmployeeFromProject(project_id, employee_id);
     }
